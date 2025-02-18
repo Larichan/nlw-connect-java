@@ -1,7 +1,5 @@
 package net.larichan.nlw_connect.controller;
 
-import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -25,14 +23,12 @@ public class EventController {
 
     @PostMapping
     public ResponseEntity<Event> createEvent(@RequestBody Event event) {
-        Event createdEvent = eventService.createEvent(event);
-        return ResponseEntity.ok(createdEvent);
+        return ResponseEntity.ok(eventService.createEvent(event));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Event> getEventById(@PathVariable Long id) {
-        Optional<Event> event = eventService.getEventById(id);
-        return event.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+        return eventService.getEventById(id).map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @GetMapping
@@ -43,14 +39,13 @@ public class EventController {
 
     @GetMapping("/prettyName/{prettyName}")
     public ResponseEntity<Event> getEventByPrettyName(@PathVariable String prettyName) {
-        Event event = eventService.getEventByPrettyName(prettyName);
-        return event != null ? ResponseEntity.ok(event) : ResponseEntity.notFound().build();
+        return eventService.getEventByPrettyName(prettyName).map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Event> updateEvent(@PathVariable Long id, @RequestBody Event eventDetails) {
-        Event updatedEvent = eventService.updateEvent(id, eventDetails);
-        return updatedEvent != null ? ResponseEntity.ok(updatedEvent) : ResponseEntity.notFound().build();
+        return ResponseEntity.ok(eventService.updateEvent(id, eventDetails));
     }
 
     @DeleteMapping("/{id}")

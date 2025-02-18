@@ -27,7 +27,7 @@ public class EventService {
         return eventRepository.findAll();
     }
 
-    public Event getEventByPrettyName(String prettyName) {
+    public Optional<Event> getEventByPrettyName(String prettyName) {
         return eventRepository.findByPrettyName(prettyName);
     }
 
@@ -45,7 +45,7 @@ public class EventService {
             event.setEndTime(eventDetails.getEndTime());
             return eventRepository.save(event);
         } else {
-            return null; // or throw an exception
+            throw new RuntimeException("Event not found");
         }
     }
 
