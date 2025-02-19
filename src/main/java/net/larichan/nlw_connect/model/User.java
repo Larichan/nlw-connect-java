@@ -23,12 +23,12 @@ public class User {
 
     @NotEmpty
     @Size(max = 255)
-    @Column(name = "user_name", nullable = false)
+    @Column(name = "user_name")
     private String userName;
 
     @NotEmpty
     @Email
     @Size(max = 255)
-    @Column(name = "user_email", nullable = false, unique = true)
+    @Column(name = "user_email", unique = true)
     private String userEmail;
 }
