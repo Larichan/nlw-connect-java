@@ -26,6 +26,8 @@ import net.larichan.nlw_connect.service.SubscriptionService;
 @RequestMapping("/api/subscriptions")
 public class SubscriptionController {
 
+    private static final int RANKING_FIRST_PLACES = 3;
+
     @Autowired
     private SubscriptionService subscriptionService;
 
@@ -38,6 +40,28 @@ public class SubscriptionController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorMessage(exception.getMessage()));
         } catch (SubscriptionConflictException exception) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(new ErrorMessage(exception.getMessage()));
+        }
+    }
+
+    @GetMapping("/{eventPrettyName}/ranking")
+    public ResponseEntity<?> getFirstPlacesRanking(@PathVariable String eventPrettyName) {
+        try {
+            return ResponseEntity
+                    .ok(subscriptionService.getCompleteRanking(eventPrettyName).subList(0, RANKING_FIRST_PLACES));
+        } catch (EventNotFoundException exception) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorMessage(exception.getMessage()));
+        }
+    }
+
+    @GetMapping("/{eventPrettyName}/ranking/{userId}")
+    public ResponseEntity<?> getRankingPositionByUser(@PathVariable String eventPrettyName, @PathVariable Long userId) {
+        try {
+            return ResponseEntity
+                    .ok(subscriptionService.getRankingByUser(eventPrettyName, userId));
+        } catch (EventNotFoundException exception) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorMessage(exception.getMessage()));
+        } catch (UserIndicationNotFoundException exception) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorMessage(exception.getMessage()));
         }
     }
 

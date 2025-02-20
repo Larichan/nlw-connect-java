@@ -1,10 +1,14 @@
 package net.larichan.nlw_connect.service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.IntStream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import net.larichan.nlw_connect.dto.SubscriptionRankingByUser;
+import net.larichan.nlw_connect.dto.SubscriptionRankingItem;
 import net.larichan.nlw_connect.dto.SubscriptionResponse;
 import net.larichan.nlw_connect.exception.EventNotFoundException;
 import net.larichan.nlw_connect.exception.SubscriptionConflictException;
@@ -55,6 +59,28 @@ public class SubscriptionService {
 
         return new SubscriptionResponse(newSub.getSubscriptionNumber(), "http://eventcoder.com/subscription/"
                 + newSub.getEvent().getPrettyName() + "/" + newSub.getSubscribedUser().getId());
+    }
+
+    public List<SubscriptionRankingItem> getCompleteRanking(String eventPrettyName) {
+        Event savedEvent = eventRepository.findByPrettyName(eventPrettyName)
+                .orElseThrow(() -> new EventNotFoundException(
+                        "Ranking do evento " + eventPrettyName
+                                + " não existe. Certifique-se de que o nome do evento está correto."));
+        return subscriptionRepository.generateRanking(savedEvent.getId());
+    }
+
+    public SubscriptionRankingByUser getRankingByUser(String eventPrettyName, Long userId) {
+        List<SubscriptionRankingItem> itens = getCompleteRanking(eventPrettyName);
+
+        SubscriptionRankingItem result = itens.stream().filter(item -> item.userId().equals(userId)).findFirst()
+                .orElseThrow(() -> new UserIndicationNotFoundException(
+                        "Usuário " + userId + " não encontrado no ranking do evento " + eventPrettyName));
+
+        // TODO: compararar com o uso do itens.indexOf(item) + 1
+        Integer position = IntStream.range(0, itens.size()).filter(i -> itens.get(i).userId().equals(userId))
+                .findFirst().getAsInt();
+
+        return new SubscriptionRankingByUser(result, position + 1);
     }
 
     public Optional<Subscription> getSubscriptionById(Integer id) {
