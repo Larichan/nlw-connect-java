@@ -21,13 +21,13 @@ public class User {
     @Column(name = "user_id")
     private Long id;
 
-    @NotEmpty
+    @NotEmpty(message = "Name is required")
     @Size(max = 255)
     @Column(name = "user_name")
     private String userName;
 
-    @NotEmpty
-    @Email
+    @NotEmpty(message = "Email is required")
+    @Email(message = "Invalid email address")
     @Size(max = 255)
     @Column(name = "user_email", unique = true)
     private String userEmail;

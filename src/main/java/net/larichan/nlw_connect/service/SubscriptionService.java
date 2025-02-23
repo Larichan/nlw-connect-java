@@ -57,7 +57,7 @@ public class SubscriptionService {
         newSub.setSubscribedUser(savedUser);
         newSub = subscriptionRepository.save(newSub);
 
-        return new SubscriptionResponse(newSub.getSubscriptionNumber(), "http://eventcoder.com/subscription/"
+        return new SubscriptionResponse(newSub.getSubscriptionNumber(), "http://localhost:8080/subscriptions/"
                 + newSub.getEvent().getPrettyName() + "/" + newSub.getSubscribedUser().getId());
     }
 

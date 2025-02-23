@@ -21,7 +21,7 @@ public class Subscription {
     @Column(name = "subscription_number")
     private Integer subscriptionNumber;
 
-    @NotNull
+    @NotNull(message = "Subscribed user is required")
     @ManyToOne
     @JoinColumn(name = "subscribed_user_id")
     private User subscribedUser;
@@ -30,7 +30,7 @@ public class Subscription {
     @JoinColumn(name = "indication_user_id")
     private User indicationUser;
 
-    @NotNull
+    @NotNull(message = "Event is required")
     @ManyToOne
     @JoinColumn(name = "event_id")
     private Event event;

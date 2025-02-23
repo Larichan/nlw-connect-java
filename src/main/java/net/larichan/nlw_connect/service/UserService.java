@@ -5,6 +5,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import net.larichan.nlw_connect.exception.UserConflictException;
 import net.larichan.nlw_connect.model.User;
 import net.larichan.nlw_connect.repository.UserRepository;
 
@@ -15,6 +16,10 @@ public class UserService {
     private UserRepository userRepository;
 
     public User createUser(User user) {
+        userRepository.findByUserEmail(user.getUserEmail()).ifPresent(savedUser -> {
+            throw new UserConflictException("usuário de e-mail " + savedUser.getUserEmail() + " já cadastrado.");
+        });
+
         return userRepository.save(user);
     }
 

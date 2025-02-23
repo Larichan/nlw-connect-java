@@ -34,11 +34,11 @@ public class Event {
     @NotEmpty
     private String prettyName;
 
-    @NotEmpty
+    @NotEmpty(message = "Description is required")
     @Size(max = 255)
     private String location;
 
-    @NotNull
+    @NotNull(message = "Price is required")
     private BigDecimal price;
 
     @Column(name = "start_date")
