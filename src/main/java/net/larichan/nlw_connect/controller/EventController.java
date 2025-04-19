@@ -1,5 +1,7 @@
 package net.larichan.nlw_connect.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -33,11 +35,10 @@ public class EventController {
     // ResponseEntity.notFound().build());
     // }
 
-    // @GetMapping
-    // public ResponseEntity<Iterable<Event>> getAllEvents() {
-    // Iterable<Event> events = eventService.getAllEvents();
-    // return ResponseEntity.ok(events);
-    // }
+    @GetMapping
+    public ResponseEntity<List<Event>> getAllEvents() {
+        return ResponseEntity.ok(eventService.getAllEvents());
+    }
 
     @GetMapping("/prettyName/{prettyName}")
     public ResponseEntity<Event> getEventByPrettyName(@PathVariable String prettyName) {

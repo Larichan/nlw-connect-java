@@ -20,6 +20,7 @@ import net.larichan.nlw_connect.dto.SubscriptionResponse;
 import net.larichan.nlw_connect.exception.EventNotFoundException;
 import net.larichan.nlw_connect.exception.SubscriptionConflictException;
 import net.larichan.nlw_connect.exception.UserIndicationNotFoundException;
+import net.larichan.nlw_connect.model.Subscription;
 import net.larichan.nlw_connect.model.User;
 import net.larichan.nlw_connect.service.SubscriptionService;
 
@@ -55,14 +56,11 @@ public class SubscriptionController {
                 .ok(subscriptionService.getRankingByUser(eventPrettyName, userId));
     }
 
-    // @GetMapping("/{id}")
-    // public ResponseEntity<Subscription> getSubscriptionById(@PathVariable Integer
-    // id) {
-    // Optional<Subscription> subscription =
-    // subscriptionService.getSubscriptionById(id);
-    // return subscription.map(ResponseEntity::ok).orElseGet(() ->
-    // ResponseEntity.notFound().build());
-    // }
+    @GetMapping("/{id}")
+    public ResponseEntity<Subscription> getSubscriptionById(@PathVariable Integer id) {
+        return subscriptionService.getSubscriptionById(id).map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
 
     // @GetMapping
     // public ResponseEntity<Iterable<Subscription>> getAllSubscriptions() {

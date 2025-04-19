@@ -1,6 +1,9 @@
 package net.larichan.nlw_connect.service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,8 +26,8 @@ public class EventService {
         return eventRepository.findById(id);
     }
 
-    public Iterable<Event> getAllEvents() {
-        return eventRepository.findAll();
+    public List<Event> getAllEvents() {
+        return StreamSupport.stream(eventRepository.findAll().spliterator(), false).collect(Collectors.toList());
     }
 
     public Optional<Event> getEventByPrettyName(String prettyName) {
